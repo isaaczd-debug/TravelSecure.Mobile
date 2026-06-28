@@ -1,14 +1,46 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="TravelSecure.Mobile.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:TravelSecure.Mobile"
-    Title="TravelSecure.Mobile">
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:auth="clr-namespace:TravelSecure.Mobile.Features.Auth"
+       xmlns:dashboard="clr-namespace:TravelSecure.Mobile.Features.Dashboard"
+       xmlns:incidents="clr-namespace:TravelSecure.Mobile.Features.Incidents"
+       xmlns:alerts="clr-namespace:TravelSecure.Mobile.Features.Alerts"
+       xmlns:profile="clr-namespace:TravelSecure.Mobile.Features.Profile"
+       x:Class="TravelSecure.Mobile.AppShell"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- FLUJO AUTH (sin barra de tabs)             -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <ShellContent Route="LoginPage"
+                  ContentTemplate="{DataTemplate auth:LoginPage}" />
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- APP PRINCIPAL con tabs personalizados      -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <TabBar x:Name="MainTabBar" Route="main">
+        <Tab Title="Inicio" Route="dashboard">
+            <ShellContent Route="DashboardPage"
+                          ContentTemplate="{DataTemplate dashboard:DashboardPage}" />
+        </Tab>
+        <Tab Title="Reportar" Route="incidents">
+            <ShellContent Route="ReportePage"
+                          ContentTemplate="{DataTemplate incidents:ReportePage}" />
+        </Tab>
+        <Tab Title="Alertas" Route="alerts">
+            <ShellContent Route="AlertsPage"
+                          ContentTemplate="{DataTemplate alerts:AlertsPage}" />
+        </Tab>
+        <Tab Title="Perfil" Route="profile">
+            <ShellContent Route="ProfilePage"
+                          ContentTemplate="{DataTemplate profile:ProfilePage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>
+
