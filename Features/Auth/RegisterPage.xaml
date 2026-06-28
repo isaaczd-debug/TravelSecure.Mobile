@@ -1,12 +1,261 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TravelSecure.Mobile.Features.Auth.NewPage1"
-             Title="NewPage1">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="TravelSecure.Mobile.Features.Auth.RegisterPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#080C14">
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#080C14" Offset="0"/>
+                <GradientStop Color="#0A1220" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Decoración top -->
+
+        <BoxView BackgroundColor="#F7CA18" Opacity="0.04"
+                 HeightRequest="3" VerticalOptions="Start"
+                 HorizontalOptions="Fill" Margin="0,80,0,0"/>
+
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="28,56,28,40" Spacing="0">
+
+                <!-- Header con botón volver -->
+
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,28">
+                    <Border Grid.Column="0"
+                            BackgroundColor="#111827"
+                            WidthRequest="40" HeightRequest="40"
+                            StrokeThickness="1">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label Text="←" TextColor="White" FontSize="18"
+                               HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnGoBack"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                    <Label Grid.Column="1" Text="TRAVEL SECURE"
+                           FontSize="12" TextColor="#6B7280"
+                           HorizontalOptions="Center" VerticalOptions="Center"
+                           CharacterSpacing="2"/>
+                    <Label Grid.Column="2" Text="🛡️" FontSize="20"
+                           VerticalOptions="Center"/>
+                </Grid>
+
+                <!-- Título -->
+                <VerticalStackLayout Spacing="6" Margin="0,0,0,32">
+                    <Label Text="Únete a la flota." FontSize="28"
+                           FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Registra tu unidad y empieza a conducir\ncon información en tiempo real."
+                           FontSize="13" TextColor="#6B7280" LineHeight="1.5"/>
+                </VerticalStackLayout>
+
+                <!-- ═══ CAMPOS DEL FORMULARIO ═══ -->
+
+                <!-- Nombre -->
+                <Label Text="NOMBRE COMPLETO" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,18">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                        <Label Grid.Column="0" Text="👤" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" x:Name="EntryNombre"
+                               Placeholder="Juan Pérez Flores"
+                               PlaceholderColor="#374151" TextColor="White"
+                               BackgroundColor="Transparent" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Correo -->
+                <Label Text="CORREO ELECTRÓNICO" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,18">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                        <Label Grid.Column="0" Text="@" TextColor="#F7CA18" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" x:Name="EntryEmail"
+                               Placeholder="correo@ejemplo.com"
+                               PlaceholderColor="#374151" TextColor="White"
+                               BackgroundColor="Transparent" Keyboard="Email"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- DNI -->
+                <Label Text="DNI / DOCUMENTO DE IDENTIDAD" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,18">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                        <Label Grid.Column="0" Text="🪪" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" x:Name="EntryDni"
+                               Placeholder="Número de documento"
+                               PlaceholderColor="#374151" TextColor="White"
+                               BackgroundColor="Transparent" Keyboard="Numeric"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Tipo de licencia -->
+                <Label Text="TIPO DE LICENCIA DE CONDUCIR" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,18">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,0,16,0">
+                        <Label Grid.Column="0" Text="📄" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,6,0"/>
+                        <Picker Grid.Column="1" x:Name="PickerLicencia"
+                                Title="Selecciona tu categoría"
+                                TitleColor="#374151" TextColor="White"
+                                BackgroundColor="Transparent">
+                            <Picker.Items>
+                                <x:String>A-I  — Moto / Mototaxi</x:String>
+                                <x:String>B-IIb — Auto / Camioneta</x:String>
+                                <x:String>A-IIb — Camión Mediano</x:String>
+                                <x:String>A-IIIa — Tráiler</x:String>
+                                <x:String>A-IIIb — Semi-articulado</x:String>
+                                <x:String>A-IIIc — Combinado / Convoy</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+                </Border>
+
+                <!-- Empresa -->
+                <Label Text="EMPRESA DE TRANSPORTE (opcional)" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,18">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                        <Label Grid.Column="0" Text="🏢" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" x:Name="EntryEmpresa"
+                               Placeholder="Nombre de la empresa o flota"
+                               PlaceholderColor="#374151" TextColor="White"
+                               BackgroundColor="Transparent" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Contraseña -->
+                <Label Text="CONTRASEÑA" FontSize="10" TextColor="#9CA3AF"
+                       FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
+                <Border BackgroundColor="#111827" HeightRequest="54"
+                        StrokeThickness="1" Margin="0,0,0,28">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                        <Label Grid.Column="0" Text="🔒" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Grid.Column="1" x:Name="EntryPassword"
+                               Placeholder="Mínimo 8 caracteres"
+                               PlaceholderColor="#374151" TextColor="White"
+                               IsPassword="True" BackgroundColor="Transparent"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Tip de seguridad -->
+                <Border BackgroundColor="#0F1D35"
+                        StrokeThickness="1"
+                        Padding="14,12"
+                        Margin="0,0,0,24">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1E3A5F"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="ℹ️" FontSize="16" VerticalOptions="Center"/>
+                        <Label Text="Tus datos están protegidos con encriptación AES-256 y son usados únicamente para verificar tu identidad vial."
+                               FontSize="11" TextColor="#6B7280" LineHeight="1.4"
+                               HorizontalOptions="Fill"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Botón Registrarse -->
+                <Border HeightRequest="54" StrokeThickness="0" Margin="0,0,0,16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#F7CA18" Offset="0"/>
+                            <GradientStop Color="#E8A500" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Button x:Name="BtnCrear"
+                            Text="REGISTRARME COMO CONDUCTOR"
+                            BackgroundColor="Transparent"
+                            TextColor="#080C14"
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            CharacterSpacing="0.5"
+                            Clicked="OnCrearCuenta"/>
+                </Border>
+
+                <ActivityIndicator x:Name="LoadingIndicator"
+                                   IsRunning="False" IsVisible="False"
+                                   Color="#F7CA18"
+                                   HorizontalOptions="Center"
+                                   Margin="0,0,0,12"/>
+
+                <!-- Ya tengo cuenta -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                    <Label Text="¿Ya tienes cuenta?" TextColor="#6B7280" FontSize="13"/>
+                    <Label Text="Inicia sesión" TextColor="#F7CA18" FontSize="13"
+                           FontAttributes="Bold">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnGoBack"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
