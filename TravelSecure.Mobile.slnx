@@ -1,3 +1,8 @@
 <Solution>
-  <Project Path="TravelSecure.Mobile.csproj" />
+  <Folder Name="/Elementos de la solución/">
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="TravelSecure.Mobile.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>
