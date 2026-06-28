@@ -1,12 +1,263 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TravelSecure.Mobile.Features.Auth.NewPage1"
-             Title="NewPage1">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="TravelSecure.Mobile.Features.Auth.LoginPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#080C14">
+
+    <Grid>
+
+        <!-- Fondo con efecto de carretera nocturna -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#080C14" Offset="0"/>
+                <GradientStop Color="#0D1520" Offset="0.5"/>
+                <GradientStop Color="#0A1628" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Circulo decorativo superior izquierdo -->
+        <Ellipse Fill="#1A2744" Opacity="0.4"
+                 WidthRequest="300" HeightRequest="300"
+                 HorizontalOptions="Start" VerticalOptions="Start"
+                 Margin="-100,-80,0,0"/>
+
+        <!-- Circulo decorativo inferior derecho -->
+        <Ellipse Fill="#1A3A5C" Opacity="0.3"
+                 WidthRequest="250" HeightRequest="250"
+                 HorizontalOptions="End" VerticalOptions="End"
+                 Margin="0,0,-80,-80"/>
+
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="32,0,32,40" Spacing="0">
+
+                <!-- ═══ ZONA HERO ═══ -->
+
+                <Grid HeightRequest="300" Margin="-32,0,-32,0">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#0F1C35" Offset="0"/>
+                            <GradientStop Color="#080C14" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+
+                    <!-- Líneas decorativas de carretera -->
+
+                    <BoxView BackgroundColor="#F7CA18" Opacity="0.08"
+                             WidthRequest="2" HeightRequest="200"
+                             HorizontalOptions="Center" VerticalOptions="End"
+                             Margin="0,0,60,0"/>
+                    <BoxView BackgroundColor="#F7CA18" Opacity="0.08"
+                             WidthRequest="2" HeightRequest="150"
+                             HorizontalOptions="Center" VerticalOptions="End"
+                             Margin="0,0,-60,0"/>
+
+                    <VerticalStackLayout VerticalOptions="Center"
+                                        HorizontalOptions="Center"
+                                        Spacing="16" Padding="0,40,0,0">
+
+                        <!-- Logo shield con glow -->
+                        <Grid HorizontalOptions="Center">
+                            <!-- Glow exterior -->
+                            <Ellipse Fill="#F7CA18" Opacity="0.12"
+                                     WidthRequest="110" HeightRequest="110"
+                                     HorizontalOptions="Center"/>
+                            <!-- Glow medio -->
+                            <Ellipse Fill="#F7CA18" Opacity="0.15"
+                                     WidthRequest="90" HeightRequest="90"
+                                     HorizontalOptions="Center"/>
+                            <!-- Círculo principal -->
+                            <Border BackgroundColor="#161B2E"
+                                    WidthRequest="72" HeightRequest="72"
+                                    HorizontalOptions="Center"
+                                    StrokeThickness="2">
+                                <Border.Stroke>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#F7CA18" Offset="0"/>
+                                        <GradientStop Color="#E8A000" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Stroke>
+                                <Border.StrokeShape>
+                                    <Ellipse/>
+                                </Border.StrokeShape>
+                                <Image Source="logo.png" WidthRequest="68" HeightRequest="68"
+          HorizontalOptions="Center"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Nombre app -->
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="TRAVEL SECURE"
+                                   FontSize="26" FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   CharacterSpacing="4"/>
+                            <Label Text="ASISTENCIA VIAL EN TIEMPO REAL"
+                                   FontSize="10" TextColor="#F7CA18"
+                                   HorizontalOptions="Center"
+                                   CharacterSpacing="2" Opacity="0.85"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- ═══ FORMULARIO ═══ -->
+                <VerticalStackLayout Spacing="0" Margin="0,8,0,0">
+
+                    <Label Text="Bienvenido de vuelta"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,6"/>
+                    <Label Text="Inicia sesión para continuar tu ruta"
+                           FontSize="13" TextColor="#6B7280"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,32"/>
+
+                    <!-- Campo Email -->
+                    <Label Text="CORREO ELECTRÓNICO"
+                           FontSize="10" TextColor="#9CA3AF"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1.5"
+                           Margin="0,0,0,8"/>
+                    <Border BackgroundColor="#111827"
+                            HeightRequest="54"
+                            StrokeThickness="1"
+                            Margin="0,0,0,18">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*" Padding="16,0">
+                            <Label Grid.Column="0" Text="@"
+                                   TextColor="#F7CA18" FontSize="16"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1"
+                                   x:Name="EntryEmail"
+                                   Placeholder="conductor@travelsecure.pe"
+                                   PlaceholderColor="#374151"
+                                   TextColor="White"
+                                   BackgroundColor="Transparent"
+                                   Keyboard="Email"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Campo Contraseña -->
+                    <Label Text="CONTRASEÑA"
+                           FontSize="10" TextColor="#9CA3AF"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1.5"
+                           Margin="0,0,0,8"/>
+                    <Border BackgroundColor="#111827"
+                            HeightRequest="54"
+                            StrokeThickness="1"
+                            Margin="0,0,0,10">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="16,0">
+                            <Label Grid.Column="0" Text="🔒"
+                                   FontSize="16" VerticalOptions="Center"
+                                   Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1"
+                                   x:Name="EntryPassword"
+                                   Placeholder="••••••••••••"
+                                   PlaceholderColor="#374151"
+                                   TextColor="White"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="2" Text="👁"
+                                   FontSize="16" TextColor="#6B7280"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ¿Olvidaste contraseña? -->
+                    <Label Text="¿Olvidaste tu contraseña?"
+                           FontSize="13" TextColor="#F7CA18"
+                           HorizontalOptions="End"
+                           Margin="0,0,0,28">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnForgotPassword"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <!-- Botón Iniciar Sesión -->
+                    <Border HeightRequest="54"
+                            StrokeThickness="0"
+                            Margin="0,0,0,16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#F7CA18" Offset="0"/>
+                                <GradientStop Color="#E8A500" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Button x:Name="BtnLogin"
+                                Text="INICIAR SESIÓN"
+                                BackgroundColor="Transparent"
+                                TextColor="#080C14"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                CharacterSpacing="1.5"
+                                Clicked="OnLoginClicked"/>
+                    </Border>
+
+                    <!-- Loading -->
+                    <ActivityIndicator x:Name="LoadingIndicator"
+                                       IsRunning="False" IsVisible="False"
+                                       Color="#F7CA18"
+                                       HorizontalOptions="Center"
+                                       Margin="0,0,0,12"/>
+
+                    <!-- Separador -->
+                    <Grid ColumnDefinitions="*,Auto,*" Margin="0,8,0,20">
+                        <BoxView Grid.Column="0" BackgroundColor="#1F2937"
+                                 HeightRequest="1" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="  o continúa con  "
+                               TextColor="#374151" FontSize="12"/>
+                        <BoxView Grid.Column="2" BackgroundColor="#1F2937"
+                                 HeightRequest="1" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <!-- Crear cuenta -->
+                    <Border HeightRequest="54"
+                            BackgroundColor="Transparent"
+                            StrokeThickness="1.5"
+                            Margin="0,0,0,32">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Button Text="Crear cuenta nueva"
+                                BackgroundColor="Transparent"
+                                TextColor="White"
+                                FontSize="14"
+                                Clicked="OnGoToRegister"/>
+                    </Border>
+
+                    <!-- Badge soporte -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                        <Ellipse Fill="#22C55E" WidthRequest="6" HeightRequest="6"
+                                 VerticalOptions="Center"/>
+                        <Label Text="SOPORTE 24/7  ·  PERÚ"
+                               FontSize="11" TextColor="#374151"
+                               CharacterSpacing="1"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
