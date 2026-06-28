@@ -2,11 +2,328 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelSecure.Mobile.Features.Incidents.ReportePage"
-             Title="ReportePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#080C14">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ═══ HEADER ═══ -->
+        <Grid Grid.Row="0" Padding="24,52,24,16" ColumnDefinitions="*,Auto"
+              BackgroundColor="#080C14">
+            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                <Label Text="🛡️ TRAVEL SECURE" FontSize="12" TextColor="#6B7280"
+                       CharacterSpacing="1"/>
+                <Label Text="Reportar Incidente" FontSize="20"
+                       FontAttributes="Bold" TextColor="White"/>
+            </VerticalStackLayout>
+            <Border Grid.Column="1" BackgroundColor="#111827"
+                    WidthRequest="40" HeightRequest="40" StrokeThickness="1">
+                <Border.Stroke>
+                    <SolidColorBrush Color="#1F2937"/>
+                </Border.Stroke>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <Label Text="👤" FontSize="18"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+        </Grid>
+
+        <!-- ═══ CONTENIDO ═══ -->
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="24,0,24,24" Spacing="20">
+
+                <!-- Subtítulo -->
+                <Label Text="Pulsa la categoría del incidente para alertar a conductores cercanos."
+                       FontSize="13" TextColor="#6B7280" LineHeight="1.5"/>
+
+                <!-- ═══ GRID DE CATEGORÍAS ═══ -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto"
+                      ColumnSpacing="12" RowSpacing="12">
+
+                    <!-- TRÁFICO -->
+                    <Border Grid.Row="0" Grid.Column="0"
+                            x:Name="BtnTrafico"
+                            BackgroundColor="#111827"
+                            StrokeThickness="1.5"
+                            Padding="0" HeightRequest="110">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTipoSelected"
+                                                  CommandParameter="Tráfico"/>
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center" Spacing="8">
+                            <Border BackgroundColor="#EF444420" WidthRequest="52" HeightRequest="52"
+                                    HorizontalOptions="Center" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Label Text="🚦" FontSize="26"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="TRÁFICO" FontSize="12" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"
+                                   CharacterSpacing="1"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- CLIMA -->
+                    <Border Grid.Row="0" Grid.Column="1"
+                            x:Name="BtnClima"
+                            BackgroundColor="#111827"
+                            StrokeThickness="1.5"
+                            Padding="0" HeightRequest="110">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTipoSelected"
+                                                  CommandParameter="Clima"/>
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center" Spacing="8">
+                            <Border BackgroundColor="#3B82F620" WidthRequest="52" HeightRequest="52"
+                                    HorizontalOptions="Center" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Label Text="⛈️" FontSize="26"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="CLIMA" FontSize="12" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"
+                                   CharacterSpacing="1"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- ACCIDENTE -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            x:Name="BtnAccidente"
+                            BackgroundColor="#111827"
+                            StrokeThickness="1.5"
+                            Padding="0" HeightRequest="110">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTipoSelected"
+                                                  CommandParameter="Accidente"/>
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center" Spacing="8">
+                            <Border BackgroundColor="#F59E0B20" WidthRequest="52" HeightRequest="52"
+                                    HorizontalOptions="Center" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Label Text="💥" FontSize="26"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="ACCIDENTE" FontSize="12" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"
+                                   CharacterSpacing="1"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- CIERRE / BLOQUEO -->
+                    <Border Grid.Row="1" Grid.Column="1"
+                            x:Name="BtnCierre"
+                            BackgroundColor="#111827"
+                            StrokeThickness="1.5"
+                            Padding="0" HeightRequest="110">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTipoSelected"
+                                                  CommandParameter="Cierre"/>
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center" Spacing="8">
+                            <Border BackgroundColor="#8B5CF620" WidthRequest="52" HeightRequest="52"
+                                    HorizontalOptions="Center" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Label Text="🚫" FontSize="26"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="CIERRE" FontSize="12" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"
+                                   CharacterSpacing="1"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- TIPO SELECCIONADO -->
+                <Border x:Name="CardTipoSeleccionado"
+                        BackgroundColor="#0F1D35"
+                        StrokeThickness="1" Padding="14,12" IsVisible="False">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1E3A5F"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="✅" FontSize="16" VerticalOptions="Center"/>
+                        <Label x:Name="LblTipoSeleccionado"
+                               Text="Tipo seleccionado"
+                               FontSize="13" TextColor="#F7CA18"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- DESCRIPCIÓN -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="DESCRIPCIÓN (opcional)" FontSize="10"
+                           TextColor="#9CA3AF" FontAttributes="Bold"
+                           CharacterSpacing="1.5"/>
+                    <Border BackgroundColor="#111827" HeightRequest="90"
+                            StrokeThickness="1" Padding="14">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Editor x:Name="EditorDescripcion"
+                                Placeholder="Describe brevemente lo que ocurre en la vía..."
+                                PlaceholderColor="#374151" TextColor="White"
+                                BackgroundColor="Transparent"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- UBICACIÓN GPS -->
+                <Border BackgroundColor="#111827" StrokeThickness="1" Padding="16">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="#1F2937"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Border Grid.Column="0" BackgroundColor="#22C55E20"
+                                WidthRequest="40" HeightRequest="40"
+                                StrokeThickness="0" Margin="0,0,12,0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
+                            <Label Text="📍" FontSize="18"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                             VerticalOptions="Center">
+                            <Label Text="UBICACIÓN GPS" FontSize="10"
+                                   TextColor="#6B7280" FontAttributes="Bold"
+                                   CharacterSpacing="1"/>
+                            <Label x:Name="LblUbicacion"
+                                   Text="Obteniendo ubicación..."
+                                   FontSize="12" TextColor="White"/>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" x:Name="LblGpsEstado"
+                               Text="● GPS"
+                               TextColor="#22C55E" FontSize="12"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- INFO RADIO -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                    <Label Text="ℹ️" FontSize="14" VerticalOptions="Center"/>
+                    <Label Text="Los reportes se comparten con conductores en un radio de 5 km"
+                           FontSize="11" TextColor="#374151" LineHeight="1.4"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ═══ BOTÓN + NAV BAR ═══ -->
+        <VerticalStackLayout Grid.Row="2" BackgroundColor="#080C14" Spacing="0">
+
+            <!-- Botón enviar -->
+            <Border HeightRequest="52" StrokeThickness="0" Margin="24,12,24,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14"/>
+                </Border.StrokeShape>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#F7CA18" Offset="0"/>
+                        <GradientStop Color="#E8A500" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Button x:Name="BtnEnviar"
+                        Text="📡  ENVIAR ALERTA A CONDUCTORES"
+                        BackgroundColor="Transparent"
+                        TextColor="#080C14"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        Clicked="OnEnviarReporte"/>
+            </Border>
+
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="False" IsVisible="False"
+                               Color="#F7CA18" HorizontalOptions="Center"
+                               Margin="0,0,0,6"/>
+
+            <!-- Bottom nav -->
+            <BoxView HeightRequest="1" BackgroundColor="#1F2937"/>
+            <Grid ColumnDefinitions="*,*,*,*" Padding="0,10,0,28">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="4">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavInicio"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="🏠" FontSize="20" HorizontalOptions="Center"/>
+                    <Label Text="Inicio" FontSize="10" TextColor="#6B7280"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="4">
+                    <Border BackgroundColor="#1A1A00" WidthRequest="44" HeightRequest="30"
+                            HorizontalOptions="Center" StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label Text="📋" FontSize="18"
+                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <Label Text="Reportar" FontSize="10" TextColor="#F7CA18"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="4">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavAlertas"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="🔔" FontSize="20" HorizontalOptions="Center"/>
+                    <Label Text="Alertas" FontSize="10" TextColor="#6B7280"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="4">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavPerfil"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="👤" FontSize="20" HorizontalOptions="Center"/>
+                    <Label Text="Perfil" FontSize="10" TextColor="#6B7280"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+
+    </Grid>
 </ContentPage>
