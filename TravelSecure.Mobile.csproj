@@ -106,4 +106,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Services\" />
+	</ItemGroup>
+
 </Project>

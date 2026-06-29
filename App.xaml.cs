@@ -1,17 +1,31 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using TravelSecure.Mobile.Features.Auth.Services;
 
 namespace TravelSecure.Mobile
 {
     public partial class App : Application
     {
-        public App()
+        private readonly AuthService _authService;
+
+        public App(AuthService authService)
         {
             InitializeComponent();
+            _authService = authService;
+
+            MainPage = new AppShell();
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
+        protected override async void OnStart()
         {
-            return new Window(new AppShell());
+            base.OnStart();
+
+            // Restaurar sesión si existe token guardado
+            await _authService.RestoreSessionAsync();
+
+            // Si está autenticado, ir al Dashboard
+            if (await _authService.IsAuthenticatedAsync())
+            {
+                await Shell.Current.GoToAsync("//main/dashboard");
+            }
         }
     }
 }

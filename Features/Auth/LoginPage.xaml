@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TravelSecure.Mobile.Features.Auth.ViewModels"
              x:Class="TravelSecure.Mobile.Features.Auth.LoginPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#080C14">
@@ -42,7 +43,6 @@
                     </Grid.Background>
 
                     <!-- Líneas decorativas de carretera -->
-
                     <BoxView BackgroundColor="#F7CA18" Opacity="0.08"
                              WidthRequest="2" HeightRequest="200"
                              HorizontalOptions="Center" VerticalOptions="End"
@@ -58,15 +58,12 @@
 
                         <!-- Logo shield con glow -->
                         <Grid HorizontalOptions="Center">
-                            <!-- Glow exterior -->
                             <Ellipse Fill="#F7CA18" Opacity="0.12"
                                      WidthRequest="110" HeightRequest="110"
                                      HorizontalOptions="Center"/>
-                            <!-- Glow medio -->
                             <Ellipse Fill="#F7CA18" Opacity="0.15"
                                      WidthRequest="90" HeightRequest="90"
                                      HorizontalOptions="Center"/>
-                            <!-- Círculo principal -->
                             <Border BackgroundColor="#161B2E"
                                     WidthRequest="72" HeightRequest="72"
                                     HorizontalOptions="Center"
@@ -81,7 +78,7 @@
                                     <Ellipse/>
                                 </Border.StrokeShape>
                                 <Image Source="logo.png" WidthRequest="68" HeightRequest="68"
-          HorizontalOptions="Center"/>
+                                       HorizontalOptions="Center"/>
                             </Border>
                         </Grid>
 
@@ -113,7 +110,7 @@
                            HorizontalOptions="Center"
                            Margin="0,0,0,32"/>
 
-                    <!-- Campo Email -->
+                    <!-- Campo Email con Binding -->
                     <Label Text="CORREO ELECTRÓNICO"
                            FontSize="10" TextColor="#9CA3AF"
                            FontAttributes="Bold"
@@ -136,6 +133,7 @@
                                    Margin="0,0,10,0"/>
                             <Entry Grid.Column="1"
                                    x:Name="EntryEmail"
+                                   Text="{Binding Email}"
                                    Placeholder="conductor@travelsecure.pe"
                                    PlaceholderColor="#374151"
                                    TextColor="White"
@@ -145,7 +143,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Campo Contraseña -->
+                    <!-- Campo Contraseña con Binding -->
                     <Label Text="CONTRASEÑA"
                            FontSize="10" TextColor="#9CA3AF"
                            FontAttributes="Bold"
@@ -167,6 +165,7 @@
                                    Margin="0,0,10,0"/>
                             <Entry Grid.Column="1"
                                    x:Name="EntryPassword"
+                                   Text="{Binding Password}"
                                    Placeholder="••••••••••••"
                                    PlaceholderColor="#374151"
                                    TextColor="White"
@@ -179,17 +178,24 @@
                         </Grid>
                     </Border>
 
-                    <!-- ¿Olvidaste contraseña? -->
+                    <!-- Mensaje de error -->
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="#EF4444"
+                           FontSize="13"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10" />
+
+                    <!-- ¿Olvidaste contraseña? con Command -->
                     <Label Text="¿Olvidaste tu contraseña?"
                            FontSize="13" TextColor="#F7CA18"
                            HorizontalOptions="End"
                            Margin="0,0,0,28">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnForgotPassword"/>
+                            <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
 
-                    <!-- Botón Iniciar Sesión -->
+                    <!-- Botón Iniciar Sesión con Command -->
                     <Border HeightRequest="54"
                             StrokeThickness="0"
                             Margin="0,0,0,16">
@@ -204,17 +210,19 @@
                         </Border.Background>
                         <Button x:Name="BtnLogin"
                                 Text="INICIAR SESIÓN"
+                                Command="{Binding LoginCommand}"
+                                IsEnabled="{Binding IsLoginEnabled}"
                                 BackgroundColor="Transparent"
                                 TextColor="#080C14"
                                 FontAttributes="Bold"
                                 FontSize="15"
-                                CharacterSpacing="1.5"
-                                Clicked="OnLoginClicked"/>
+                                CharacterSpacing="1.5"/>
                     </Border>
 
-                    <!-- Loading -->
+                    <!-- Loading con Binding -->
                     <ActivityIndicator x:Name="LoadingIndicator"
-                                       IsRunning="False" IsVisible="False"
+                                       IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
                                        Color="#F7CA18"
                                        HorizontalOptions="Center"
                                        Margin="0,0,0,12"/>
@@ -229,7 +237,7 @@
                                  HeightRequest="1" VerticalOptions="Center"/>
                     </Grid>
 
-                    <!-- Crear cuenta -->
+                    <!-- Crear cuenta con Command -->
                     <Border HeightRequest="54"
                             BackgroundColor="Transparent"
                             StrokeThickness="1.5"
@@ -241,10 +249,10 @@
                             <RoundRectangle CornerRadius="14"/>
                         </Border.StrokeShape>
                         <Button Text="Crear cuenta nueva"
+                                Command="{Binding GoToRegisterCommand}"
                                 BackgroundColor="Transparent"
                                 TextColor="White"
-                                FontSize="14"
-                                Clicked="OnGoToRegister"/>
+                                FontSize="14"/>
                     </Border>
 
                     <!-- Badge soporte -->
