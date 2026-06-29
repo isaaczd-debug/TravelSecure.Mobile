@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TravelSecure.Mobile.Features.Auth.ViewModels"
              x:Class="TravelSecure.Mobile.Features.Auth.RegisterPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#080C14">
@@ -14,7 +15,6 @@
         </Grid.Background>
 
         <!-- Decoración top -->
-
         <BoxView BackgroundColor="#F7CA18" Opacity="0.04"
                  HeightRequest="3" VerticalOptions="Start"
                  HorizontalOptions="Fill" Margin="0,80,0,0"/>
@@ -23,7 +23,6 @@
             <VerticalStackLayout Padding="28,56,28,40" Spacing="0">
 
                 <!-- Header con botón volver -->
-
                 <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,28">
                     <Border Grid.Column="0"
                             BackgroundColor="#111827"
@@ -38,7 +37,7 @@
                         <Label Text="←" TextColor="White" FontSize="18"
                                HorizontalOptions="Center" VerticalOptions="Center">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnGoBack"/>
+                                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
                             </Label.GestureRecognizers>
                         </Label>
                     </Border>
@@ -60,7 +59,7 @@
 
                 <!-- ═══ CAMPOS DEL FORMULARIO ═══ -->
 
-                <!-- Nombre -->
+                <!-- Nombre con Binding -->
                 <Label Text="NOMBRE COMPLETO" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -75,13 +74,14 @@
                         <Label Grid.Column="0" Text="👤" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" x:Name="EntryNombre"
+                               Text="{Binding Name}"
                                Placeholder="Juan Pérez Flores"
                                PlaceholderColor="#374151" TextColor="White"
                                BackgroundColor="Transparent" VerticalOptions="Center"/>
                     </Grid>
                 </Border>
 
-                <!-- Correo -->
+                <!-- Correo con Binding -->
                 <Label Text="CORREO ELECTRÓNICO" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -96,6 +96,7 @@
                         <Label Grid.Column="0" Text="@" TextColor="#F7CA18" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" x:Name="EntryEmail"
+                               Text="{Binding Email}"
                                Placeholder="correo@ejemplo.com"
                                PlaceholderColor="#374151" TextColor="White"
                                BackgroundColor="Transparent" Keyboard="Email"
@@ -103,7 +104,7 @@
                     </Grid>
                 </Border>
 
-                <!-- DNI -->
+                <!-- DNI con Binding -->
                 <Label Text="DNI / DOCUMENTO DE IDENTIDAD" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -118,14 +119,15 @@
                         <Label Grid.Column="0" Text="🪪" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" x:Name="EntryDni"
+                               Text="{Binding Dni}"
                                Placeholder="Número de documento"
                                PlaceholderColor="#374151" TextColor="White"
                                BackgroundColor="Transparent" Keyboard="Numeric"
-                               VerticalOptions="Center"/>
+                               VerticalOptions="Center" MaxLength="8"/>
                     </Grid>
                 </Border>
 
-                <!-- Tipo de licencia -->
+                <!-- Tipo de licencia con Binding -->
                 <Label Text="TIPO DE LICENCIA DE CONDUCIR" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -140,22 +142,15 @@
                         <Label Grid.Column="0" Text="📄" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,6,0"/>
                         <Picker Grid.Column="1" x:Name="PickerLicencia"
+                                ItemsSource="{Binding LicenseOptions}"
+                                SelectedItem="{Binding SelectedLicense}"
                                 Title="Selecciona tu categoría"
                                 TitleColor="#374151" TextColor="White"
-                                BackgroundColor="Transparent">
-                            <Picker.Items>
-                                <x:String>A-I  — Moto / Mototaxi</x:String>
-                                <x:String>B-IIb — Auto / Camioneta</x:String>
-                                <x:String>A-IIb — Camión Mediano</x:String>
-                                <x:String>A-IIIa — Tráiler</x:String>
-                                <x:String>A-IIIb — Semi-articulado</x:String>
-                                <x:String>A-IIIc — Combinado / Convoy</x:String>
-                            </Picker.Items>
-                        </Picker>
+                                BackgroundColor="Transparent"/>
                     </Grid>
                 </Border>
 
-                <!-- Empresa -->
+                <!-- Empresa con Binding -->
                 <Label Text="EMPRESA DE TRANSPORTE (opcional)" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -170,13 +165,14 @@
                         <Label Grid.Column="0" Text="🏢" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" x:Name="EntryEmpresa"
+                               Text="{Binding TransportCompany}"
                                Placeholder="Nombre de la empresa o flota"
                                PlaceholderColor="#374151" TextColor="White"
                                BackgroundColor="Transparent" VerticalOptions="Center"/>
                     </Grid>
                 </Border>
 
-                <!-- Contraseña -->
+                <!-- Contraseña con Binding -->
                 <Label Text="CONTRASEÑA" FontSize="10" TextColor="#9CA3AF"
                        FontAttributes="Bold" CharacterSpacing="1.5" Margin="0,0,0,8"/>
                 <Border BackgroundColor="#111827" HeightRequest="54"
@@ -191,12 +187,20 @@
                         <Label Grid.Column="0" Text="🔒" FontSize="16"
                                VerticalOptions="Center" Margin="0,0,10,0"/>
                         <Entry Grid.Column="1" x:Name="EntryPassword"
+                               Text="{Binding Password}"
                                Placeholder="Mínimo 8 caracteres"
                                PlaceholderColor="#374151" TextColor="White"
                                IsPassword="True" BackgroundColor="Transparent"
                                VerticalOptions="Center"/>
                     </Grid>
                 </Border>
+
+                <!-- Mensaje de error -->
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#EF4444"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10" />
 
                 <!-- Tip de seguridad -->
                 <Border BackgroundColor="#0F1D35"
@@ -217,7 +221,7 @@
                     </HorizontalStackLayout>
                 </Border>
 
-                <!-- Botón Registrarse -->
+                <!-- Botón Registrarse con Command -->
                 <Border HeightRequest="54" StrokeThickness="0" Margin="0,0,0,16">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="14"/>
@@ -230,27 +234,30 @@
                     </Border.Background>
                     <Button x:Name="BtnCrear"
                             Text="REGISTRARME COMO CONDUCTOR"
+                            Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding IsRegisterEnabled}"
                             BackgroundColor="Transparent"
                             TextColor="#080C14"
                             FontAttributes="Bold"
                             FontSize="14"
-                            CharacterSpacing="0.5"
-                            Clicked="OnCrearCuenta"/>
+                            CharacterSpacing="0.5"/>
                 </Border>
 
+                <!-- Loading con Binding -->
                 <ActivityIndicator x:Name="LoadingIndicator"
-                                   IsRunning="False" IsVisible="False"
+                                   IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
                                    Color="#F7CA18"
                                    HorizontalOptions="Center"
                                    Margin="0,0,0,12"/>
 
-                <!-- Ya tengo cuenta -->
+                <!-- Ya tengo cuenta con Command -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
                     <Label Text="¿Ya tienes cuenta?" TextColor="#6B7280" FontSize="13"/>
                     <Label Text="Inicia sesión" TextColor="#F7CA18" FontSize="13"
                            FontAttributes="Bold">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnGoBack"/>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </HorizontalStackLayout>
