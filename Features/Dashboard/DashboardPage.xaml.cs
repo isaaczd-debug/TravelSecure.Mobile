@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using TravelSecure.Mobile.Features.Auth.Service;
 
 namespace TravelSecure.Mobile.Features.Dashboard;
 
@@ -8,11 +9,24 @@ public partial class DashboardPage : ContentPage
 
 
     //integracion de la api
-    private const string ApiUrlBase = "https://10.0.2.2:7224";
+    private const string ApiUrlBase = "http://localhost:5138";
+    private readonly WeatherService _weatherService;
+
+    private readonly HttpClient _httpClient;
+    private bool _isCargandoAlertas = false;
 
     public DashboardPage()
     {
         InitializeComponent();
+        //Inicializacion consumo de api autenticado
+        _weatherService = new WeatherService();
+
+        //Centramos el bypass
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+        _httpClient = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(8) };
     }
 
     protected override async void OnAppearing()
@@ -34,20 +48,13 @@ public partial class DashboardPage : ContentPage
                 var location = await Geolocation.GetLastKnownLocationAsync();
                 if (location != null)
                 {
-
                     ciudadPorDefecto = "Lima";
                 }
             }
             catch { }
 
-            var handler = new HttpClientHandler();
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-
-            using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(8) };
-
-            var url = $"{ApiUrlBase}/api/WeatherForescast/ruta/{ciudadPorDefecto}";
-
-            var response = await client.GetStringAsync(url);
+            var url = $"{ApiUrlBase}/api/WeatherForecast/ruta/{ciudadPorDefecto}";
+            var response = await _httpClient.GetStringAsync(url);
             var data = JsonDocument.Parse(response);
 
             var root = data.RootElement;
@@ -55,9 +62,13 @@ public partial class DashboardPage : ContentPage
             var desc = root.GetProperty("description").GetString() ?? "despejado";
             var name = root.GetProperty("name").GetString();
             var country = root.GetProperty("country").GetString();
-            var feelsLike = data.RootElement.GetProperty("feelsLike").GetDecimal();
+            var feelsLike = root.GetProperty("feelsLike").GetDecimal();
             var humidity = data.RootElement.GetProperty("humidity").GetInt32();
             var wind = data.RootElement.GetProperty("windSpeed").GetDecimal();
+
+            LblTempClima.Text = $"{temp:F0}°";
+            LblDescClima.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(desc);
+
 
             LblTemp.Text = $"{temp:F0}°";
             LblDesc.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(desc);
@@ -80,6 +91,7 @@ public partial class DashboardPage : ContentPage
         }
         catch
         {
+            //Vlores por defecto
             LblTempClima.Text = "19°";
             LblDescClima.Text = "Parcialmente nublado";
             LblEstadoRuta.Text = "✅ Ruta Segura";
@@ -87,8 +99,86 @@ public partial class DashboardPage : ContentPage
         }
     }
 
+
+
+
+
+    private async void OnBtnBuscarClima(object sender, EventArgs e)
+    {
+        string ciudad = TxtRutaCiudad.Text?.Trim();
+
+        if (string.IsNullOrWhiteSpace(ciudad))
+        {
+            await DisplayAlert("Atención", "Por favor ingrese el nombre de una ciudad", "OK");
+            return;
+        }
+
+        try
+        {
+            string token = await SecureStorage.GetAsync("auth_token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                await DisplayAlert("Sesión Expirada", "No se encontró un token válido. Por favor, vuelve a iniciar sesión.", "OK");
+                return;
+            }
+
+            var weatherService = new WeatherService();
+
+            var resultado = await weatherService.GetWeatherAsync(ciudad,token);
+
+
+            if (resultado != null)
+            {
+                // 3. Muestra de datos corregidos con el nuevo modelo en Mayúsculas
+                var temp = resultado.temp;
+                var desc = resultado.description ?? "despejado";
+                var name = resultado.name;
+                var country = resultado.country;
+                var feelsLike = resultado.feelsLike;
+                var humidity = resultado.humidity;
+                var wind = resultado.windSpeed;
+
+                // Sincronizacion de interfaz gráfica (El resto de tu código queda exactamente igual)
+                LblTempClima.Text = $"{temp:F0}°";
+                LblDescClima.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(desc);
+
+                LblTemp.Text = $"{temp:F0}°";
+                LblDesc.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(desc);
+
+                if (LblCiudad != null) LblCiudad.Text = $"{name}, {country}";
+                if (LblFeelsLike != null) LblFeelsLike.Text = $"Sensación térmica: {feelsLike:F0}°";
+                if (LblHumidity != null) LblHumidity.Text = $"Humedad: {humidity}%";
+                if (LblWind != null) LblWind.Text = $"Viento: {wind} m/s";
+
+                var cond = desc.ToLower();
+                if (cond.Contains("lluvia") || cond.Contains("tormenta") || cond.Contains("niebla"))
+                {
+                    LblEstadoRuta.Text = "⚠️ Precaución en ruta";
+                    LblEstadoRuta.TextColor = Color.FromArgb("#F59E0B");
+                }
+                else
+                {
+                    LblEstadoRuta.Text = "✅ Ruta Segura";
+                    LblEstadoRuta.TextColor = Color.FromArgb("#22C55E");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo obtener el clima. Verifica la ciudad o tu sesión.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo obtener el clima: {ex.Message}", "OK");
+        }    
+    }
+
     private async Task CargarAlertasRecientes()
     {
+        //Evitamos duplicados
+        ListaAlertas.Clear();
+
         await Task.Delay(900);
 
         LoadingAlertas.IsRunning = false;
@@ -171,72 +261,4 @@ public partial class DashboardPage : ContentPage
     private async void OnNavReporte(object sender, EventArgs e) => await Shell.Current.GoToAsync("//main/incidents/ReportePage");
     private async void OnNavAlertas(object sender, EventArgs e) => await Shell.Current.GoToAsync("//main/alerts/AlertsPage");
     private async void OnNavPerfil(object sender, EventArgs e) => await Shell.Current.GoToAsync("//main/profile/ProfilePage");
-
-    private async void OnBtnBuscarClima(object sender, EventArgs e)
-
-    {
-        string ciudad = TxtRutaCiudad.Text;
-
-        if (string.IsNullOrWhiteSpace(ciudad))
-        {
-            await DisplayAlert("Atención", "Por favor ingrese el nombre de una ciudad", "OK");
-            return;
-        }
-
-        try
-        {
-            string url = $"{ApiUrlBase}/api/WeatherForescast/ruta/{ciudad}";
-
-            var handler = new HttpClientHandler();
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-
-            using (HttpClient cliente = new HttpClient(handler))
-            {
-                HttpResponseMessage response = await cliente.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonPlano = await response.Content.ReadAsStringAsync();
-
-                    //LblClimaTextoPlano.Text = jsonPlano;
-
-                    var data = JsonDocument.Parse(jsonPlano);
-
-                    var temp = data.RootElement.GetProperty("temp").GetDecimal();
-                    var desc = data.RootElement.GetProperty("description").GetString() ?? "despejado";
-                    var name = data.RootElement.GetProperty("name").GetString();
-                    var country = data.RootElement.GetProperty("country").GetString();
-                    var feelsLike = data.RootElement.GetProperty("feelsLike").GetDecimal();
-                    var humidity = data.RootElement.GetProperty("humidity").GetInt32();
-                    var wind = data.RootElement.GetProperty("windSpeed").GetDecimal();
-
-                    LblTemp.Text = $"{temp:F0}°";
-                    LblDesc.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(desc);
-                    LblCiudad.Text = $"{name}, {country}";
-                    LblFeelsLike.Text = $"Sensación térmica: {feelsLike:F0}°";
-                    LblHumidity.Text = $"Humedad: {humidity}%";
-                    LblWind.Text = $"Viento: {wind} m/s";
-
-                    var cond = desc.ToLower();
-                    if (cond.Contains("lluvia") || cond.Contains("tormenta") || cond.Contains("niebla"))
-                    {
-                        LblEstadoRuta.Text = "⚠️ Precaución en ruta";
-                        LblEstadoRuta.TextColor = Color.FromArgb("#F59E0B");
-                    }
-                    else
-                    {
-                        LblEstadoRuta.Text = "✅ Ruta Segura";
-                        LblEstadoRuta.TextColor = Color.FromArgb("#22C55E");
-                    }
-                }
-                else
-                {
-                    await DisplayAlert("Error", "No se pudo obtener el clima para la ciudad ingresada.", "OK");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", $"Ocurrió un error al obtener el clima: {ex.Message}", "OK");
-        }
-    }
 }

@@ -91,6 +91,16 @@ namespace TravelSecure.Mobile.Features.Auth.ViewModels
 
                 var response = await _authService.LoginAsync(Email, Password);
 
+                if (response != null && !string.IsNullOrEmpty(response.AccessToken))
+                {
+                    await SecureStorage.SetAsync("auth_token", response.AccessToken);
+                }
+                else if (response != null && !string.IsNullOrEmpty(response.AccessToken)) // Por si acaso esté en minúscula
+                {
+                    await SecureStorage.SetAsync("auth_token", response.AccessToken);
+                }
+
+
                 // ✅ Login exitoso - ir al Dashboard
                 await Shell.Current.GoToAsync("//main/dashboard");
 

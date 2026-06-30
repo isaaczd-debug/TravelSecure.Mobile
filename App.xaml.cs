@@ -19,6 +19,7 @@ namespace TravelSecure.Mobile
             base.OnStart();
 
             // Restaurar sesión si existe token guardado
+            
             await _authService.RestoreSessionAsync();
 
             // Si está autenticado, ir al Dashboard
@@ -26,6 +27,7 @@ namespace TravelSecure.Mobile
             {
                 await Shell.Current.GoToAsync("//main/dashboard");
             }
+            
         }
     }
 }
