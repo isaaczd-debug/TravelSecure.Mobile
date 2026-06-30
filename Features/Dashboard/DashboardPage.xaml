@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelSecure.Mobile.Features.Dashboard.ViewModels"
+             xmlns:converters="clr-namespace:TravelSecure.Mobile.Helpers.Converters"
              x:Class="TravelSecure.Mobile.Features.Dashboard.DashboardPage"
              Shell.NavBarIsVisible="False"
-             
              BackgroundColor="#080C14">
+
+    <ContentPage.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        <converters:WeatherDescriptionConverter x:Key="WeatherDescriptionConverter" />
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*,Auto">
 
@@ -15,7 +21,6 @@
                 <Label Text="Buenos días 👋" FontSize="12" TextColor="#6B7280"/>
                 <Label Text="TRAVEL SECURE" FontSize="18" FontAttributes="Bold"
                        TextColor="White" CharacterSpacing="1"/>
-
             </VerticalStackLayout>
             <!-- Badge clima en vivo -->
             <Border Grid.Column="1"
@@ -55,7 +60,7 @@
         <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="24,0,24,24" Spacing="20">
 
-                <!-- BUSCADOR DE RUTA -->
+                <!-- ═══ BUSCADOR DE RUTA ═══ -->
                 <Border BackgroundColor="#0F1520"
                         StrokeThickness="1"
                         Padding="20">
@@ -73,7 +78,7 @@
                                    VerticalOptions="Center"/>
                             <Border BackgroundColor="#F7CA18"
                                     Padding="6,2"
-                                    HorizontalOptions="EndAndExpand">
+                                    HorizontalOptions="End">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="4"/>
                                 </Border.StrokeShape>
@@ -119,8 +124,13 @@
                                 <Ellipse Grid.Column="0" Fill="#F7CA18"
                                          WidthRequest="8" HeightRequest="8"
                                          VerticalOptions="Center" Margin="0,0,10,0"/>
-                                <Label Grid.Column="1" Text="¿A dónde vas hoy?"
-                                       TextColor="#374151" FontSize="13"
+                                <Entry Grid.Column="1" 
+                                       Text="{Binding SearchCity}"
+                                       Placeholder="¿A dónde vas hoy?"
+                                       TextColor="White"
+                                       PlaceholderColor="#374151"
+                                       FontSize="13"
+                                       BackgroundColor="Transparent"
                                        VerticalOptions="Center"/>
                             </Grid>
                         </Border>
@@ -141,13 +151,22 @@
                                     TextColor="#080C14"
                                     FontAttributes="Bold"
                                     FontSize="13"
-                                    Clicked="OnBuscarRuta"/>
+                                    Command="{Binding SearchCommand}"
+                                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
                         </Border>
+
+                        <Label Text="{Binding ErrorMessage}"
+                               TextColor="#EF4444"
+                               IsVisible="{Binding HasError}"
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <!--Integracion con la api nuevo apartado -->
-                <Border BackgroundColor="#0F1520" StrokeThickness="1" Padding="16">
+                <!-- ═══ PRUEBA DE API BACKEND (CLIMA) ═══ -->
+                <Border BackgroundColor="#0F1520" 
+                        StrokeThickness="1" 
+                        Padding="16">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1E2D45"/>
                     </Border.Stroke>
@@ -156,63 +175,60 @@
                     </Border.StrokeShape>
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="🛠️ PRUEBA DE API BACKEND (CLIMA)" FontSize="11" TextColor="#FFC107" FontAttributes="Bold" CharacterSpacing="1"/>
+                        <Label Text="🛠️ PRUEBA DE API BACKEND (CLIMA)" 
+                               FontSize="11" 
+                               TextColor="#FFC107" 
+                               FontAttributes="Bold" 
+                               CharacterSpacing="1"/>
 
-                        <Entry x:Name="TxtRutaCiudad" 
-                            Placeholder="Escribe una ciudad (Ej: Lima)" 
-                            TextColor="White"
-                            PlaceholderColor="#4B5563"
-                            BackgroundColor="#111827"
-                            FontSize="13"
-                            HeightRequest="40"/>
-                        <Button x:Name="BtnBuscarClima"
-                            Text="CONSULTAR API BACKEND"
-                            Clicked="OnBtnBuscarClima"
-                            BackgroundColor="#FFC107"
-                            TextColor="#080C14"
-                            FontAttributes="Bold"
-                            FontSize="12"
-                            HeightRequest="38"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Entry Grid.Column="0" 
+                                   Text="{Binding SearchCity}"
+                                   Placeholder="Escribe una ciudad (Ej: Lima)" 
+                                   TextColor="White"
+                                   PlaceholderColor="#4B5563"
+                                   BackgroundColor="#111827"
+                                   FontSize="13"
+                                   HeightRequest="40"/>
+                            <Button Grid.Column="1"
+                                    Text="CONSULTAR"
+                                    Command="{Binding SearchCommand}"
+                                    BackgroundColor="#FFC107"
+                                    TextColor="#080C14"
+                                    FontAttributes="Bold"
+                                    FontSize="12"
+                                    HeightRequest="40"
+                                    WidthRequest="100"/>
+                        </Grid>
 
-                        <VerticalStackLayout Spacing="4" Margin="0,5,0,0"
-                                    BackgroundColor="#050B14"
-                                    Padding="10">
-
-                            <Label x:Name="LblTemp"
-                                Text="--°"
-                                FontSize="24"
-                                FontAttributes="Bold"
-                                TextColor="#F7CA18"/>
-
-                            <Label x:Name="LblDesc"
-                                Text="Esperando consulta..."
-                                FontSize="13"
-                                TextColor="#22C55E"/>
-
-                            <Label x:Name="LblCiudad"
-                                Text="--"
-                                FontSize="11"
-                                TextColor="#9CA3AF"/>
-                            <Label x:Name="LblFeelsLike"
-                                Text=""
-                                FontSize="11"
-                                TextColor="#9CA3AF"/>
-
-                            <Label x:Name="LblHumidity"
-                                Text=""
-                                FontSize="11"
-                                TextColor="#9CA3AF"/>
-
-                            <Label x:Name="LblWind"
-                                Text=""
-                                FontSize="11"
-                                TextColor="#9CA3AF"/>
-
+                        <VerticalStackLayout Spacing="4" 
+                                              Margin="0,5,0,0"
+                                              BackgroundColor="#050B14"
+                                              Padding="10">
+                            <Label Text="{Binding Weather.Temp, StringFormat='{0:F0}°'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#F7CA18"/>
+                            <Label Text="{Binding Weather.Description, Converter={StaticResource WeatherDescriptionConverter}}"
+                                   FontSize="13"
+                                   TextColor="#22C55E"/>
+                            <Label Text="{Binding WeatherLocation}"
+                                   FontSize="11"
+                                   TextColor="#9CA3AF"/>
+                            <Label Text="{Binding Weather.FeelsLike, StringFormat='Sensación térmica: {0:F0}°'}"
+                                   FontSize="11"
+                                   TextColor="#9CA3AF"/>
+                            <Label Text="{Binding Weather.Humidity, StringFormat='Humedad: {0}%'}"
+                                   FontSize="11"
+                                   TextColor="#9CA3AF"/>
+                            <Label Text="{Binding Weather.WindSpeed, StringFormat='Viento: {0:F1} m/s'}"
+                                   FontSize="11"
+                                   TextColor="#9CA3AF"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- CLIMA EN RUTA -->
+                <!-- ═══ CLIMA EN RUTA ═══ -->
                 <Border StrokeThickness="0" Padding="0">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20"/>
@@ -229,30 +245,29 @@
                                    TextColor="#6B7280" FontAttributes="Bold"
                                    CharacterSpacing="1.5"/>
                             <HorizontalStackLayout Spacing="10" Margin="0,4,0,0">
-                                <Label x:Name="LblTempClima" Text="--°"
+                                <Label Text="{Binding Weather.Temp, StringFormat='{0:F0}°'}"
                                        FontSize="36" FontAttributes="Bold"
                                        TextColor="White"/>
                                 <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                                    <Label x:Name="LblDescClima" Text="Cargando..."
+                                    <Label Text="{Binding Weather.Description, Converter={StaticResource WeatherDescriptionConverter}}"
                                            FontSize="13" TextColor="#9CA3AF"/>
-                                    <Label x:Name="LblEstadoRuta" Text="● Verificando"
-                                           FontSize="12" TextColor="#6B7280"/>
+                                    <Label Text="{Binding WeatherStatus}"
+                                           FontSize="12" TextColor="{Binding WeatherStatusColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Column="1" Spacing="8"
                                              HorizontalOptions="End"
                                              VerticalOptions="Center">
-                            <Label Text="☁️" FontSize="40" HorizontalOptions="Center"/>
-                            <Label Text="Lima, PE" FontSize="11"
+                            <Label Text="{Binding WeatherEmoji}" FontSize="40" HorizontalOptions="Center"/>
+                            <Label Text="{Binding WeatherLocation}" FontSize="11"
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
-                <!-- ESTADÍSTICAS RÁPIDAS -->
+                <!-- ═══ ESTADÍSTICAS RÁPIDAS ═══ -->
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
-                    <!-- Reportes hoy -->
                     <Border Grid.Column="0" BackgroundColor="#111827"
                             StrokeThickness="1" Padding="14,12">
                         <Border.Stroke>
@@ -269,7 +284,6 @@
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Border>
-                    <!-- Rutas activas -->
                     <Border Grid.Column="1" BackgroundColor="#111827"
                             StrokeThickness="1" Padding="14,12">
                         <Border.Stroke>
@@ -286,7 +300,6 @@
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Border>
-                    <!-- Estado vías -->
                     <Border Grid.Column="2" BackgroundColor="#111827"
                             StrokeThickness="1" Padding="14,12">
                         <Border.Stroke>
@@ -305,7 +318,7 @@
                     </Border>
                 </Grid>
 
-                <!-- MAPA PLACEHOLDER -->
+                <!-- ═══ MAPA PLACEHOLDER ═══ -->
                 <Border StrokeThickness="1" HeightRequest="190" Padding="0">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1F2937"/>
@@ -320,7 +333,6 @@
                                 <GradientStop Color="#091422" Offset="1"/>
                             </LinearGradientBrush>
                         </Grid.Background>
-                        <!-- Cuadrícula de mapa simulada -->
                         <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*,*,*"
                               Opacity="0.15">
                             <BoxView Grid.Row="0" Grid.ColumnSpan="5" BackgroundColor="#4B5563" HeightRequest="1" VerticalOptions="Start"/>
@@ -332,7 +344,6 @@
                             <BoxView Grid.RowSpan="4" Grid.Column="2" BackgroundColor="#4B5563" WidthRequest="1" HorizontalOptions="Start"/>
                             <BoxView Grid.RowSpan="4" Grid.Column="3" BackgroundColor="#4B5563" WidthRequest="1" HorizontalOptions="Start"/>
                         </Grid>
-                        <!-- Pin de ubicación -->
                         <VerticalStackLayout HorizontalOptions="Center"
                                              VerticalOptions="Center" Spacing="4">
                             <Label Text="📍" FontSize="36"
@@ -345,7 +356,6 @@
                                        TextColor="#080C14" FontAttributes="Bold"/>
                             </Border>
                         </VerticalStackLayout>
-                        <!-- Label MAPA -->
                         <Label Text="MAPA INTERACTIVO" FontSize="9"
                                TextColor="#374151" FontAttributes="Bold"
                                CharacterSpacing="2"
@@ -354,7 +364,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ALERTAS RECIENTES -->
+                <!-- ═══ ALERTAS RECIENTES ═══ -->
                 <Label Text="ALERTAS RECIENTES" FontSize="10" TextColor="#6B7280"
                        FontAttributes="Bold" CharacterSpacing="1.5"/>
 
@@ -365,10 +375,78 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="16"/>
                     </Border.StrokeShape>
-                    <VerticalStackLayout x:Name="ListaAlertas" Spacing="0">
-                        <ActivityIndicator x:Name="LoadingAlertas" IsRunning="True"
+                    <VerticalStackLayout Spacing="0">
+                        <ActivityIndicator IsRunning="{Binding IsLoadingAlerts}"
                                            Color="#F7CA18" HorizontalOptions="Center"
                                            Margin="0,20,0,20"/>
+                        <CollectionView ItemsSource="{Binding RecentAlerts}"
+                                        IsVisible="{Binding HasAlerts}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#111827"
+                                            StrokeThickness="0"
+                                            Padding="16,12"
+                                            Margin="4,2">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12"/>
+                                        </Border.StrokeShape>
+                                        <Grid ColumnDefinitions="44,*,Auto">
+                                            <Border Grid.Column="0"
+                                                    BackgroundColor="{Binding Color}"
+                                                    WidthRequest="38"
+                                                    HeightRequest="38"
+                                                    StrokeThickness="0"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10"/>
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding Icono}"
+                                                       FontSize="18"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="1"
+                                                                  Spacing="2"
+                                                                  VerticalOptions="Center">
+                                                <Label Text="{Binding Tipo}"
+                                                       FontSize="13"
+                                                       TextColor="White"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding Lugar}"
+                                                       FontSize="11"
+                                                       TextColor="#6B7280"/>
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="2"
+                                                                  Spacing="4"
+                                                                  HorizontalOptions="End"
+                                                                  VerticalOptions="Center">
+                                                <Border BackgroundColor="{Binding Color}"
+                                                        Padding="6,2"
+                                                        StrokeThickness="0">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="4"/>
+                                                    </Border.StrokeShape>
+                                                    <Label Text="{Binding Nivel}"
+                                                           FontSize="9"
+                                                           TextColor="White"
+                                                           FontAttributes="Bold"/>
+                                                </Border>
+                                                <Label Text="{Binding Tiempo}"
+                                                       FontSize="10"
+                                                       TextColor="#374151"
+                                                       HorizontalOptions="End"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Label Text="No hay alertas recientes"
+                               TextColor="#6B7280"
+                               FontSize="12"
+                               HorizontalOptions="Center"
+                               Margin="0,20"
+                               IsVisible="{Binding HasNoAlerts}"/>
                     </VerticalStackLayout>
                 </Border>
 
@@ -397,7 +475,7 @@
                 <!-- Reportar -->
                 <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="4">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnNavReporte"/>
+                        <TapGestureRecognizer Command="{Binding NavigateToIncidentsCommand}"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="📋" FontSize="20" HorizontalOptions="Center"/>
                     <Label Text="Reportar" FontSize="10" TextColor="#6B7280"
@@ -407,7 +485,7 @@
                 <!-- Alertas -->
                 <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="4">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnNavAlertas"/>
+                        <TapGestureRecognizer Command="{Binding NavigateToAlertsCommand}"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="🔔" FontSize="20" HorizontalOptions="Center"/>
                     <Label Text="Alertas" FontSize="10" TextColor="#6B7280"
@@ -417,7 +495,7 @@
                 <!-- Perfil -->
                 <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="4">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnNavPerfil"/>
+                        <TapGestureRecognizer Command="{Binding NavigateToProfileCommand}"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="👤" FontSize="20" HorizontalOptions="Center"/>
                     <Label Text="Perfil" FontSize="10" TextColor="#6B7280"

@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
+using TravelSecure.Mobile.Features.Auth;
 using TravelSecure.Mobile.Features.Auth.Services;
 using TravelSecure.Mobile.Features.Auth.ViewModels;
-using TravelSecure.Mobile.Features.Auth;
+using TravelSecure.Mobile.Features.Dashboard;
+using TravelSecure.Mobile.Features.Dashboard.Services;
+using TravelSecure.Mobile.Features.Dashboard.ViewModels;
 
 namespace TravelSecure.Mobile
 {
@@ -33,6 +36,11 @@ namespace TravelSecure.Mobile
             // 🔥 REGISTRO DE PAGES
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+
+
+            builder.Services.AddSingleton<WeatherService>();
+            builder.Services.AddTransient<DashboardViewModel>();
+            builder.Services.AddTransient<DashboardPage>();
 
             return builder.Build();
         }
