@@ -28,7 +28,7 @@
                 <HorizontalStackLayout Spacing="4">
                     <Ellipse Fill="#EF4444" WidthRequest="6" HeightRequest="6"
                              VerticalOptions="Center"/>
-                    <Label Text="4 ACTIVAS" FontSize="10" TextColor="#EF4444"
+                    <Label x:Name="LblBadgeCount" Text="0 ACTIVAS" FontSize="10" TextColor="#EF4444"
                            FontAttributes="Bold" CharacterSpacing="1"/>
                 </HorizontalStackLayout>
             </Border>
@@ -39,6 +39,7 @@
                     HorizontalScrollBarVisibility="Never"
                     Padding="24,0,24,14">
             <HorizontalStackLayout Spacing="8">
+                <!-- Filtros: se mantienen, pero añadiremos clase activa visible desde code-behind -->
                 <Border x:Name="FiltroTodas" BackgroundColor="#F7CA18"
                         Padding="14,8" StrokeThickness="0">
                     <Border.StrokeShape>
@@ -51,7 +52,7 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </Border>
-                <Border BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
+                <Border x:Name="FiltroTrafico" BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1F2937"/>
                     </Border.Stroke>
@@ -64,7 +65,7 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </Border>
-                <Border BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
+                <Border x:Name="FiltroClima" BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1F2937"/>
                     </Border.Stroke>
@@ -77,7 +78,7 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </Border>
-                <Border BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
+                <Border x:Name="FiltroAccidente" BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1F2937"/>
                     </Border.Stroke>
@@ -90,7 +91,7 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </Border>
-                <Border BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
+                <Border x:Name="FiltroCierre" BackgroundColor="#111827" Padding="14,8" StrokeThickness="1">
                     <Border.Stroke>
                         <SolidColorBrush Color="#1F2937"/>
                     </Border.Stroke>

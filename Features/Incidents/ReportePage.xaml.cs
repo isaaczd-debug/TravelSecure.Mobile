@@ -1,3 +1,5 @@
+using TravelSecure.Mobile.Features.Incidents.Services;
+
 namespace TravelSecure.Mobile.Features.Incidents;
 
 public partial class ReportePage : ContentPage
@@ -5,13 +7,22 @@ public partial class ReportePage : ContentPage
     private string _tipoSeleccionado = string.Empty;
     private double _latitud = 0;
     private double _longitud = 0;
+    private readonly IncidentApiService _apiService;
 
     private static readonly Color ColorActivo = Color.FromArgb("#F7CA18");
     private static readonly Color ColorInactivo = Color.FromArgb("#1F2937");
 
-    public ReportePage()
+    public ReportePage(IncidentApiService apiService)
     {
         InitializeComponent();
+        _apiService = apiService;
+    }
+
+    // Constructor sin parámetros para que el XAML loader pueda instanciar la página
+    public ReportePage()
+        : this(App.Services.GetService(typeof(IncidentApiService)) as IncidentApiService
+               ?? throw new InvalidOperationException("IncidentApiService no está registrado en App.Services"))
+    {
     }
 
     protected override async void OnAppearing()
@@ -95,21 +106,39 @@ public partial class ReportePage : ContentPage
 
         try
         {
-            // Aquí irá la llamada real al backend cuando esté listo:
-            // using var client = new HttpClient();
-            // var reporte = new { tipo = _tipoSeleccionado, descripcion = EditorDescripcion.Text,
-            //                     latitud = _latitud, longitud = _longitud, fecha = DateTime.UtcNow };
-            // var json = System.Text.Json.JsonSerializer.Serialize(reporte);
-            // var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            // await client.PostAsync("http://TU_BACKEND/api/incidents", content);
+            // Usar el servicio inyectado
+            var api = _apiService;
 
-            await Task.Delay(1600);
+            var tipoEnum = _tipoSeleccionado switch
+            {
+                "Tráfico" => 0,
+                "Accidente" => 1,
+                "Cierre" => 2,
+                "Clima" => 3,
+                _ => 0
+            };
 
-            await DisplayAlert("✅ Alerta enviada",
-                $"Tu reporte de '{_tipoSeleccionado}' fue enviado.\n" +
-                "Los conductores cercanos han sido notificados.", "Aceptar");
+            var request = new TravelSecure.Mobile.Features.Incidents.Models.CreateIncidentRequest
+            {
+                Type = tipoEnum,
+                Description = EditorDescripcion.Text,
+                Latitude = _latitud,
+                Longitude = _longitud
+            };
 
-            ResetForm();
+            var response = await api.CreateIncidentAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                await DisplayAlert("✅ Alerta enviada",
+                    $"Tu reporte de '{_tipoSeleccionado}' fue enviado.\nLos conductores cercanos han sido notificados.", "Aceptar");
+                ResetForm();
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("❌ Error al enviar",
+                    $"Respuesta del servidor: {response.StatusCode}\n{content}", "OK");
+            }
         }
         catch (Exception ex)
         {
