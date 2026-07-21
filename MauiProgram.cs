@@ -4,6 +4,7 @@ using TravelSecure.Mobile.Features.Auth.Services;
 using TravelSecure.Mobile.Features.Auth.ViewModels;
 using TravelSecure.Mobile.Features.Dashboard;
 using TravelSecure.Mobile.Features.Dashboard.Services;
+using TravelSecure.Mobile.Features.Incidents.Services;
 using TravelSecure.Mobile.Features.Dashboard.ViewModels;
 
 namespace TravelSecure.Mobile
@@ -28,6 +29,10 @@ namespace TravelSecure.Mobile
             // 🔥 REGISTRO DE SERVICIOS (INYECCIÓN DE DEPENDENCIAS)
             builder.Services.AddSingleton<TokenStorage>();
             builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<IncidentApiService>();
+
+            // Registrar DashboardViewModel con dependencia IncidentApiService
+            builder.Services.AddTransient<TravelSecure.Mobile.Features.Dashboard.ViewModels.DashboardViewModel>();
 
             // 🔥 REGISTRO DE VIEWMODELS
             builder.Services.AddTransient<LoginViewModel>();

@@ -83,7 +83,7 @@
                 </Grid>
 
                 <!-- ═══ ESTADÍSTICAS ═══ -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="1"
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="1"
                       BackgroundColor="#111827" Margin="24,0,24,20">
                     <Grid.Shadow>
                         <Shadow Brush="#000000" Opacity="0.3" Offset="0,4" Radius="12"/>
@@ -102,22 +102,10 @@
                     <BoxView Grid.Column="0" BackgroundColor="#1F2937"
                              WidthRequest="1" HorizontalOptions="End"/>
 
-                    <!-- Viajes -->
+                    <!-- Reportes (reemplaza Viajes) -->
                     <VerticalStackLayout Grid.Column="1" Padding="0,16" Spacing="4"
                                          HorizontalOptions="Center">
-                        <Label Text="842" FontSize="18" FontAttributes="Bold"
-                               TextColor="White" HorizontalOptions="Center"/>
-                        <Label Text="Viajes" FontSize="10"
-                               TextColor="#6B7280" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-
-                    <BoxView Grid.Column="1" BackgroundColor="#1F2937"
-                             WidthRequest="1" HorizontalOptions="End"/>
-
-                    <!-- Reportes -->
-                    <VerticalStackLayout Grid.Column="2" Padding="0,16" Spacing="4"
-                                         HorizontalOptions="Center">
-                        <Label Text="127" FontSize="18" FontAttributes="Bold"
+                        <Label x:Name="LblReportesCount" Text="0" FontSize="18" FontAttributes="Bold"
                                TextColor="White" HorizontalOptions="Center"/>
                         <Label Text="Reportes" FontSize="10"
                                TextColor="#6B7280" HorizontalOptions="Center"/>
@@ -213,51 +201,6 @@
                     <Label Text="PREFERENCIAS" FontSize="10"
                            TextColor="#6B7280" FontAttributes="Bold"
                            CharacterSpacing="1.5" Margin="0,12,0,4"/>
-
-                    <!-- Modo nocturno -->
-                    <Border BackgroundColor="#111827" StrokeThickness="1" Padding="16,12">
-                        <Border.Stroke>
-                            <SolidColorBrush Color="#1F2937"/>
-                        </Border.Stroke>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="14"/>
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Label Grid.Column="0" Text="🌙" FontSize="20"
-                                   VerticalOptions="Center" Margin="0,0,14,0"/>
-                            <VerticalStackLayout Grid.Column="1" Spacing="2"
-                                                 VerticalOptions="Center">
-                                <Label Text="Modo Conducción Nocturna" FontSize="14"
-                                       TextColor="White"/>
-                                <Label Text="Automático" FontSize="11"
-                                       TextColor="#F7CA18"/>
-                            </VerticalStackLayout>
-                            <Label Grid.Column="2" Text="›" FontSize="20"
-                                   TextColor="#374151" VerticalOptions="Center"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Idioma -->
-                    <Border BackgroundColor="#111827" StrokeThickness="1" Padding="16,12">
-                        <Border.Stroke>
-                            <SolidColorBrush Color="#1F2937"/>
-                        </Border.Stroke>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="14"/>
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Label Grid.Column="0" Text="🌍" FontSize="20"
-                                   VerticalOptions="Center" Margin="0,0,14,0"/>
-                            <VerticalStackLayout Grid.Column="1" Spacing="2"
-                                                 VerticalOptions="Center">
-                                <Label Text="Idioma" FontSize="14" TextColor="White"/>
-                                <Label Text="Español (Perú)" FontSize="11"
-                                       TextColor="#6B7280"/>
-                            </VerticalStackLayout>
-                            <Label Grid.Column="2" Text="›" FontSize="20"
-                                   TextColor="#374151" VerticalOptions="Center"/>
-                        </Grid>
-                    </Border>
 
                     <!-- Cerrar sesión -->
                     <Border BackgroundColor="#1A0D0D" StrokeThickness="1"

@@ -266,8 +266,8 @@
                     </Grid>
                 </Border>
 
-                <!-- ═══ ESTADÍSTICAS RÁPIDAS ═══ -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <!-- ═══ ESTADÍSTICAS RÁPIDAS / CONTADORES POR TIPO ═══ -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
                     <Border Grid.Column="0" BackgroundColor="#111827"
                             StrokeThickness="1" Padding="14,12">
                         <Border.Stroke>
@@ -277,10 +277,10 @@
                             <RoundRectangle CornerRadius="14"/>
                         </Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="🚨" FontSize="20" HorizontalOptions="Center"/>
-                            <Label Text="12" FontSize="22" FontAttributes="Bold"
-                                   TextColor="White" HorizontalOptions="Center"/>
-                            <Label Text="Alertas hoy" FontSize="9"
+                            <Label Text="🚗" FontSize="20" HorizontalOptions="Center"/>
+                            <Label Text="{Binding TrafficCount}" FontSize="22" FontAttributes="Bold"
+                                   TextColor="#F7CA18" HorizontalOptions="Center"/>
+                            <Label Text="Tráfico" FontSize="9"
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Border>
@@ -293,10 +293,10 @@
                             <RoundRectangle CornerRadius="14"/>
                         </Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="🚗" FontSize="20" HorizontalOptions="Center"/>
-                            <Label Text="48" FontSize="22" FontAttributes="Bold"
-                                   TextColor="#F7CA18" HorizontalOptions="Center"/>
-                            <Label Text="Conductores" FontSize="9"
+                            <Label Text="❄️" FontSize="20" HorizontalOptions="Center"/>
+                            <Label Text="{Binding WeatherCount}" FontSize="22" FontAttributes="Bold"
+                                   TextColor="#3B82F6" HorizontalOptions="Center"/>
+                            <Label Text="Clima" FontSize="9"
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Border>
@@ -309,10 +309,26 @@
                             <RoundRectangle CornerRadius="14"/>
                         </Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="🛡️" FontSize="20" HorizontalOptions="Center"/>
-                            <Label Text="OK" FontSize="22" FontAttributes="Bold"
-                                   TextColor="#22C55E" HorizontalOptions="Center"/>
-                            <Label Text="Vías Lima" FontSize="9"
+                            <Label Text="🚨" FontSize="20" HorizontalOptions="Center"/>
+                            <Label Text="{Binding AccidentCount}" FontSize="22" FontAttributes="Bold"
+                                   TextColor="#EF4444" HorizontalOptions="Center"/>
+                            <Label Text="Accidentes" FontSize="9"
+                                   TextColor="#6B7280" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="3" BackgroundColor="#111827"
+                            StrokeThickness="1" Padding="14,12">
+                        <Border.Stroke>
+                            <SolidColorBrush Color="#1F2937"/>
+                        </Border.Stroke>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="🚧" FontSize="20" HorizontalOptions="Center"/>
+                            <Label Text="{Binding ClosureCount}" FontSize="22" FontAttributes="Bold"
+                                   TextColor="#F59E0B" HorizontalOptions="Center"/>
+                            <Label Text="Cierres" FontSize="9"
                                    TextColor="#6B7280" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Border>
